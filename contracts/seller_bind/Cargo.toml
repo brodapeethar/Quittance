@@ -1,5 +1,3 @@
-[workspace]
-
 [package]
 name = "seller-bind"
 version = "0.1.0"

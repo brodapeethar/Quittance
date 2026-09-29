@@ -14,7 +14,6 @@ import {
   Inbox,
 } from 'lucide-react';
 import { format } from 'date-fns';
-import { relativeTime } from '@/lib/relativeTime';
 import { formatAddress } from '@/lib/utils';
 import { downloadCSV, downloadPDF, downloadJSON } from '@/lib/export';
 import { toast } from 'sonner';
@@ -228,7 +227,7 @@ export default function TransactionHistory({
             className="btn btn-primary flex items-center gap-2"
             type="button"
           >
-            <RefreshCw className="w-4 h-4" aria-hidden="true" />
+            <RefreshCw className="w-4 h-4" />
             <span>Try again</span>
           </button>
         </div>
@@ -247,7 +246,6 @@ export default function TransactionHistory({
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                aria-pressed={filter === f}
                 className={`px-3 py-1 text-sm rounded-lg transition-colors ${
                   filter === f
                     ? 'bg-stellar-600 text-white'
@@ -266,7 +264,7 @@ export default function TransactionHistory({
                 onClick={() => setShowExportMenu(!showExportMenu)}
                 className="px-3 py-1 text-sm rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium flex items-center gap-2 transition-colors"
               >
-                <Download className="w-4 h-4" aria-hidden="true" />
+                <Download className="w-4 h-4" />
                 Export
               </button>
 
@@ -364,12 +362,8 @@ export default function TransactionHistory({
                     </span>
                   </div>
                   <div className="flex items-center gap-3 text-sm text-gray-500">
-                    {/* Relative time is primary; the absolute date is
-                        available on hover via the title tooltip. */}
-                    <span
-                      title={format(new Date(tx.createdAt), 'MMM dd, yyyy HH:mm')}
-                    >
-                      {relativeTime(tx.createdAt)}
+                    <span>
+                      {format(new Date(tx.createdAt), 'MMM dd, yyyy HH:mm')}
                     </span>
                     {tx.memo && (
                       <>

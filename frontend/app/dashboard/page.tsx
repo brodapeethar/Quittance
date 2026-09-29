@@ -20,7 +20,6 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { downloadInvoiceCSV } from '@/lib/export';
-import { invoiceStatusLabel } from '@/lib/invoiceStatusLabel';
 
 export default function DashboardPage() {
   const { publicKey, connected } = useWalletStore();
@@ -93,8 +92,13 @@ export default function DashboardPage() {
       toast.error('No invoices to export');
       return;
     }
-    downloadInvoiceCSV(filteredInvoices as any);
-    toast.success(`Exported ${filteredInvoices.length} invoices to CSV`);
+    const paidInvoices = filteredInvoices.filter(inv => inv.status === 'PAID');
+    if (paidInvoices.length === 0) {
+      toast.error('No paid invoices to export');
+      return;
+    }
+    downloadInvoiceCSV(paidInvoices as any);
+    toast.success(`Exported ${paidInvoices.length} paid invoices to CSV`);
   };
 
   return (
@@ -117,12 +121,8 @@ export default function DashboardPage() {
                 window.location.reload();
               }} />
             )}
-            <Link
-              href="/"
-              className="btn btn-primary flex items-center gap-2"
-              aria-label="New Invoice"
-            >
-              <Plus className="w-5 h-5" aria-hidden="true" />
+            <Link href="/" className="btn btn-primary flex items-center gap-2">
+              <Plus className="w-5 h-5" />
               <span className="hidden sm:inline">New Invoice</span>
             </Link>
           </div>
@@ -148,7 +148,6 @@ export default function DashboardPage() {
           <div className="bg-white rounded-lg border border-gray-200 mb-6 p-2 flex gap-2">
             <button
               onClick={() => setViewMode('invoices')}
-              aria-pressed={viewMode === 'invoices'}
               className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-colors ${
                 viewMode === 'invoices'
                   ? 'bg-cyan-500 text-white'
@@ -159,7 +158,6 @@ export default function DashboardPage() {
             </button>
             <button
               onClick={() => setViewMode('transactions')}
-              aria-pressed={viewMode === 'transactions'}
               className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-colors ${
                 viewMode === 'transactions'
                   ? 'bg-cyan-500 text-white'
@@ -245,7 +243,6 @@ export default function DashboardPage() {
                 <input
                   type="text"
                   placeholder="Search invoices..."
-                  aria-label="Search invoices"
                   className="input w-full"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -254,10 +251,10 @@ export default function DashboardPage() {
               <button
                 onClick={handleExportCSV}
                 className="btn btn-primary flex items-center gap-2 whitespace-nowrap"
-                title="Export displayed invoices"
-                aria-label="Export CSV"
+                disabled={filteredInvoices.filter(inv => inv.status === 'PAID').length === 0}
+                title="Export paid invoices only"
               >
-                <Download className="w-5 h-5" aria-hidden="true" />
+                <Download className="w-5 h-5" />
                 <span className="hidden sm:inline">Export CSV</span>
               </button>
             </div>
@@ -267,14 +264,13 @@ export default function DashboardPage() {
                 <button
                   key={status}
                   onClick={() => setFilter(status)}
-                  aria-pressed={filter === status}
                   className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
                     filter === status
                       ? 'bg-cyan-500 text-white'
                       : 'text-gray-600 hover:bg-gray-100'
                   }`}
                 >
-                  {status === 'all' ? 'All' : invoiceStatusLabel(status)}
+                  {status.charAt(0).toUpperCase() + status.slice(1)}
                 </button>
               ))}
             </div>
@@ -323,7 +319,7 @@ export default function DashboardPage() {
                   onClick={loadData}
                   className="btn btn-primary inline-flex items-center gap-2"
                 >
-                  <RefreshCw className="w-5 h-5" aria-hidden="true" />
+                  <RefreshCw className="w-5 h-5" />
                   Try again
                 </button>
               </div>
@@ -340,7 +336,7 @@ export default function DashboardPage() {
                 </p>
                 {!searchQuery && (
                   <Link href="/" className="btn btn-primary inline-flex items-center gap-2">
-                    <Plus className="w-5 h-5" aria-hidden="true" />
+                    <Plus className="w-5 h-5" />
                     Create invoice
                   </Link>
                 )}

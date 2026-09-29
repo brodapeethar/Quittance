@@ -6,7 +6,6 @@ import { toast } from 'sonner';
 import { Wallet, Loader2 } from 'lucide-react';
 import { invoiceApi } from '@/lib/api';
 import { getAssetByCode } from '@/lib/assets';
-import { horizonStatus } from '@/lib/horizonStatus';
 
 interface PaymentButtonProps {
   destination: string;
@@ -18,7 +17,6 @@ interface PaymentButtonProps {
   payerName?: string;
   payerEmail?: string;
   onSuccess?: (txHash: string) => void;
-  onError?: (error: unknown) => void;
 }
 
 const PAY_TOAST_ID = 'payment-flow';
@@ -33,7 +31,6 @@ export default function PaymentButton({
   payerName,
   payerEmail,
   onSuccess,
-  onError,
 }: PaymentButtonProps) {
   const [loading, setLoading] = useState(false);
 
@@ -81,14 +78,10 @@ export default function PaymentButton({
 
       onSuccess?.(txHash);
     } catch (error: any) {
-      if (onError) {
-        onError(error);
-      } else {
-        toast.error('Payment failed', {
-          id: PAY_TOAST_ID,
-          description: horizonStatus(error) || error.message || 'Try again',
-        });
-      }
+      toast.error('Payment failed', {
+        id: PAY_TOAST_ID,
+        description: error.message || 'Try again',
+      });
     } finally {
       setLoading(false);
     }
@@ -110,17 +103,16 @@ export default function PaymentButton({
       <button
         onClick={handlePayment}
         disabled={loading}
-        aria-busy={loading}
         className="btn btn-primary w-full flex items-center justify-center gap-2 text-lg py-4"
       >
         {loading ? (
           <>
-            <Loader2 aria-hidden="true" className="w-6 h-6 animate-spin" />
+            <Loader2 className="w-6 h-6 animate-spin" />
             Processing...
           </>
         ) : (
           <>
-            <Wallet aria-hidden="true" className="w-6 h-6" />
+            <Wallet className="w-6 h-6" />
             Pay with Freighter
           </>
         )}

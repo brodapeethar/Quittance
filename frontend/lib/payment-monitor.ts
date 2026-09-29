@@ -5,7 +5,6 @@
 
 import { server } from './stellar';
 import { toast } from 'sonner';
-import { explorerTxUrl } from './explorerUrl';
 
 export interface PaymentNotification {
   id: string;
@@ -99,7 +98,7 @@ class PaymentMonitor {
         });
 
       this.activeStreams.set(publicKey, closeHandler);
-
+      
       toast.success('Payment monitoring active', {
         description: 'You will be notified of incoming payments',
         duration: 3000,
@@ -140,7 +139,7 @@ class PaymentMonitor {
    */
   private showNotification(payment: PaymentNotification) {
     const amount = parseFloat(payment.amount).toFixed(2);
-
+    
     // Play notification sound (optional)
     if (typeof window !== 'undefined' && 'Notification' in window) {
       // Request notification permission if not granted
@@ -152,7 +151,7 @@ class PaymentMonitor {
       if (Notification.permission === 'granted') {
         new Notification('💰 Payment Received!', {
           body: `${amount} ${payment.assetCode} from ${payment.from.slice(0, 8)}...`,
-          icon: '/quittance-logo.png',
+          icon: '/Quittance.jpg',
           tag: payment.hash,
         });
       }
@@ -165,7 +164,8 @@ class PaymentMonitor {
       action: {
         label: 'View',
         onClick: () => {
-          window.open(explorerTxUrl(payment.hash), '_blank');
+          const network = process.env.NEXT_PUBLIC_STELLAR_NETWORK === 'TESTNET' ? 'testnet' : 'public';
+          window.open(`https://stellar.expert/explorer/${network}/tx/${payment.hash}`, '_blank');
         },
       },
     });
@@ -195,3 +195,4 @@ if (typeof window !== 'undefined') {
     paymentMonitor.stopAll();
   });
 }
+

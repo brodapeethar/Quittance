@@ -21,12 +21,10 @@
  */
 export const parseCorsOrigin = (raw: string | undefined, fallback = 'http://localhost:3000'): string[] => {
   const source = raw?.trim() || fallback;
-  const origins = source
+  return source
     .split(',')
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
-
-  return origins.length > 0 ? origins : [fallback];
 };
 
 export default { parseCorsOrigin };

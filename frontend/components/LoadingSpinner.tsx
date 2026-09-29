@@ -1,120 +1,65 @@
 'use client';
 
-import React from 'react';
 import { Loader2 } from 'lucide-react';
 
-export type SpinnerSize =
-  | 'small'
-  | 'medium'
-  | 'large'
-  | 'sm'
-  | 'md'
-  | 'lg'
-  | number;
+type SpinnerVariant = 'default' | 'teal' | 'muted';
+type SpinnerSize = 'sm' | 'md' | 'lg';
 
-export type SpinnerVariant =
-  | 'default'
-  | 'teal'
-  | 'muted'
-  | 'primary'
-  | 'secondary';
-
-export interface LoadingSpinnerProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'size'> {
-  /** Accessible label for screen readers. Defaults to "Loading..." if omitted. */
+interface LoadingSpinnerProps {
+  /** Accessible label for screen readers. Defaults to "Loading" if omitted. */
   label?: string;
-  /** Visible message shown below or next to the spinner. */
+  /** Visible message shown below the spinner. */
   message?: string;
-  /** Visual size preset or numeric pixel value in px. @default 'md' */
+  /** Spinner size preset. @default 'md' */
   size?: SpinnerSize;
-  /** Color variant preset. @default 'teal' */
+  /** Color variant. @default 'teal' */
   variant?: SpinnerVariant;
-  /** Additional CSS classes applied to the wrapper element. */
+  /** Additional CSS classes applied to the wrapper. */
   className?: string;
-  /** When true, visually displays the label text. @default false */
-  showLabel?: boolean;
-  /** When true, visually hides the label text (sr-only). */
+  /** When true, label text is visually hidden but still announced to screen readers. @default false */
   hideLabel?: boolean;
   /** Custom test id for querying in tests. */
   'data-testid'?: string;
 }
 
+const sizeMap: Record<SpinnerSize, { icon: number; text: string }> = {
+  sm: { icon: 16, text: 'text-xs' },
+  md: { icon: 24, text: 'text-sm' },
+  lg: { icon: 36, text: 'text-base' },
+};
+
 const variantMap: Record<SpinnerVariant, string> = {
   default: 'text-gray-500',
   teal: 'text-[var(--teal)]',
   muted: 'text-[var(--muted)]',
-  primary: 'text-cyan-600',
-  secondary: 'text-slate-600',
 };
 
-function getSpinnerSizeDetails(size: SpinnerSize): {
-  iconSize: number;
-  textSize: string;
-  gapClass: string;
-} {
-  if (typeof size === 'number') {
-    const textSize = size >= 32 ? 'text-base' : size <= 18 ? 'text-xs' : 'text-sm';
-    return { iconSize: size, textSize, gapClass: 'gap-2' };
-  }
-
-  switch (size) {
-    case 'small':
-    case 'sm':
-      return { iconSize: 16, textSize: 'text-xs', gapClass: 'gap-1.5' };
-    case 'large':
-    case 'lg':
-      return { iconSize: 36, textSize: 'text-base', gapClass: 'gap-3' };
-    case 'medium':
-    case 'md':
-    default:
-      return { iconSize: 24, textSize: 'text-sm', gapClass: 'gap-2' };
-  }
-}
-
 export default function LoadingSpinner({
-  label = 'Loading...',
+  label = 'Loading',
   message,
   size = 'md',
   variant = 'teal',
   className = '',
-  showLabel,
-  hideLabel,
+  hideLabel = false,
   'data-testid': testId,
-  ...restProps
 }: LoadingSpinnerProps) {
-  const { iconSize, textSize, gapClass } = getSpinnerSizeDetails(size);
-  const colorClass = variantMap[variant] ?? variantMap.teal;
-
-  const isVisuallyHidden =
-    hideLabel !== undefined
-      ? hideLabel
-      : showLabel !== undefined
-        ? !showLabel
-        : !message;
-
-  const textToDisplay = message ?? label;
+  const { icon: iconSize, text: textSize } = sizeMap[size];
+  const colorClass = variantMap[variant];
 
   return (
     <div
       role="status"
-      aria-live="polite"
+      className={`inline-flex flex-col items-center justify-center gap-2 ${className}`}
       data-testid={testId}
-      className={`inline-flex flex-col items-center justify-center ${gapClass} ${className}`.trim()}
-      {...restProps}
     >
       <Loader2
         className={`animate-spin ${colorClass}`}
         size={iconSize}
         aria-hidden="true"
       />
-      <span
-        className={
-          isVisuallyHidden
-            ? 'sr-only'
-            : `font-medium ${textSize} ${colorClass}`
-        }
-      >
-        {textToDisplay}
+
+      <span className={hideLabel ? 'sr-only' : `font-medium ${textSize} ${colorClass}`}>
+        {message ?? label}
       </span>
     </div>
   );

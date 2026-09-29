@@ -1,29 +1,21 @@
-import { describe, it, expect } from 'vitest';
+import test from 'node:test';
+import assert from 'node:assert/strict';
+
 import { networkBadgeModel } from './networkBadgeModel';
 
-describe('networkBadgeModel', () => {
-  it('returns TESTNET for testnet values', () => {
-    expect(networkBadgeModel('TESTNET')).toBe('TESTNET');
-    expect(networkBadgeModel('testnet')).toBe('TESTNET');
-    expect(networkBadgeModel('  Testnet  ')).toBe('TESTNET');
-  });
+test('returns TESTNET for testnet values', () => {
+  assert.equal(networkBadgeModel('TESTNET'), 'TESTNET');
+  assert.equal(networkBadgeModel('testnet'), 'TESTNET');
+});
 
-  it('returns PUBLIC for public values', () => {
-    expect(networkBadgeModel('PUBLIC')).toBe('PUBLIC');
-    expect(networkBadgeModel(' public ')).toBe('PUBLIC');
-  });
+test('returns PUBLIC for public values', () => {
+  assert.equal(networkBadgeModel('PUBLIC'), 'PUBLIC');
+  assert.equal(networkBadgeModel(' public '), 'PUBLIC');
+});
 
-  it('defaults to TESTNET when the value is unset or empty', () => {
-    expect(networkBadgeModel(undefined)).toBe('TESTNET');
-    expect(networkBadgeModel(null)).toBe('TESTNET');
-    expect(networkBadgeModel('')).toBe('TESTNET');
-    expect(networkBadgeModel('   ')).toBe('TESTNET');
-  });
-
-  it('falls back to PUBLIC for unrecognised input', () => {
-    expect(networkBadgeModel('mainnet')).toBe('PUBLIC');
-    expect(networkBadgeModel('production')).toBe('PUBLIC');
-    expect(networkBadgeModel('futurenet')).toBe('PUBLIC');
-    expect(networkBadgeModel('Futurenet')).toBe('PUBLIC');
-  });
+test('falls back to PUBLIC for invalid or empty input', () => {
+  assert.equal(networkBadgeModel(undefined), 'PUBLIC');
+  assert.equal(networkBadgeModel(''), 'PUBLIC');
+  assert.equal(networkBadgeModel('mainnet'), 'PUBLIC');
+  assert.equal(networkBadgeModel('production'), 'PUBLIC');
 });

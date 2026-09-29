@@ -8,7 +8,7 @@ class InvoiceMemoryService {
    * Create a new invoice
    */
   async createInvoice(input: CreateInvoiceInput): Promise<any> {
-    // The seller public key now comes from the caller (the frontend).
+    // Seller public key artık frontend'den geliyor!
     if (!input.sellerPublicKey) {
       throw new Error('Seller public key is required');
     }
@@ -18,7 +18,7 @@ class InvoiceMemoryService {
     expiresAt.setDate(expiresAt.getDate() + (input.expiresInDays || 7));
 
     const invoice = memoryStorage.createInvoice({
-      sellerPublicKey: input.sellerPublicKey, // Dynamic wallet of the caller.
+      sellerPublicKey: input.sellerPublicKey, // Dinamik!
       amount: input.amount,
       assetCode: input.assetCode || 'XLM',
       assetIssuer: input.assetIssuer,

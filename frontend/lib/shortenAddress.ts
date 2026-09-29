@@ -18,6 +18,5 @@ export function shortenAddress(
 
   if (address.length <= prefixLength + suffixLength) return address;
 
-  const suffix = suffixLength > 0 ? address.slice(-suffixLength) : '';
-  return `${address.slice(0, prefixLength)}${ELLIPSIS}${suffix}`;
+  return `${address.slice(0, prefixLength)}${ELLIPSIS}${address.slice(-suffixLength)}`;
 }

@@ -12,10 +12,9 @@ export default function LoadingSpinnerDemo() {
         <section>
           <h2 className="text-lg font-semibold mb-4">Size Variants</h2>
           <div className="flex items-end gap-8">
-            <LoadingSpinner size="small" label="Small (preset)" showLabel />
-            <LoadingSpinner size="medium" label="Medium (preset)" showLabel />
-            <LoadingSpinner size="large" label="Large (preset)" showLabel />
-            <LoadingSpinner size={48} label="Numeric (48px)" showLabel />
+            <LoadingSpinner size="sm" label="Small spinner" hideLabel />
+            <LoadingSpinner size="md" label="Medium spinner" hideLabel />
+            <LoadingSpinner size="lg" label="Large spinner" hideLabel />
           </div>
         </section>
 
@@ -23,17 +22,15 @@ export default function LoadingSpinnerDemo() {
         <section>
           <h2 className="text-lg font-semibold mb-4">Color Variants</h2>
           <div className="flex items-end gap-8">
-            <LoadingSpinner variant="default" label="Default" showLabel />
-            <LoadingSpinner variant="teal" label="Teal" showLabel />
-            <LoadingSpinner variant="muted" label="Muted" showLabel />
-            <LoadingSpinner variant="primary" label="Primary" showLabel />
-            <LoadingSpinner variant="secondary" label="Secondary" showLabel />
+            <LoadingSpinner variant="default" label="Default spinner" hideLabel />
+            <LoadingSpinner variant="teal" label="Teal spinner" hideLabel />
+            <LoadingSpinner variant="muted" label="Muted spinner" hideLabel />
           </div>
         </section>
 
-        {/* With messages and labels */}
+        {/* With messages */}
         <section>
-          <h2 className="text-lg font-semibold mb-4">With Messages and Custom Labels</h2>
+          <h2 className="text-lg font-semibold mb-4">With Messages</h2>
           <div className="space-y-6">
             <LoadingSpinner
               size="lg"
@@ -46,18 +43,18 @@ export default function LoadingSpinnerDemo() {
             />
             <LoadingSpinner
               size="md"
-              label="Connecting to Stellar network…"
-              showLabel
-              variant="primary"
+              message="Connecting to Stellar network…"
+              variant="default"
             />
           </div>
         </section>
 
-        {/* Accessible Screen-Reader Only Label */}
+        {/* Screen-reader only label */}
         <section>
           <h2 className="text-lg font-semibold mb-4">Screen-Reader Only Label</h2>
           <LoadingSpinner
             label="Processing your payment"
+            hideLabel
             data-testid="sr-spinner"
           />
         </section>

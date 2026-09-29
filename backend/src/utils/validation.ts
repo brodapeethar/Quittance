@@ -5,11 +5,6 @@ export const stellarPublicKeySchema = z.string()
   .length(56)
   .regex(/^G[A-Z2-7]{55}$/, 'Invalid Stellar public key format');
 
-// Stellar transaction hash validation (64-char hex)
-export const verifyTxHashSchema = z.string()
-  .length(64)
-  .regex(/^[0-9a-fA-F]{64}$/, 'Invalid Stellar transaction hash format');
-
 // Invoice creation schema
 export const createInvoiceSchema = z.object({
   amount: z.number().positive().max(1000000000),
@@ -39,6 +34,5 @@ export default {
   createInvoiceSchema,
   paymentSchema,
   stellarPublicKeySchema,
-  verifyTxHashSchema,
 };
 

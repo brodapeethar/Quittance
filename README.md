@@ -19,9 +19,7 @@ Quittance helps freelancers create an invoice, accept payment via link or QR on 
 | Dashboard scoped to connected wallet | Done |
 | Primary **Download Proof** CTA after paid | Done (PDF print flow in browser) |
 | Simulate-payment UI | Removed from demo UI (`ALLOW_SIMULATE=true` only on API) |
-| Public hosted frontend | Live — see [`EVIDENCE.md`](./EVIDENCE.md) |
-| Public API + filled testnet evidence pack | Phase D (API / tx / video still TBD in EVIDENCE) |
-| Vercel Analytics + `/feedback` | Done (frontend) |
+| Public hosted demo + testnet evidence pack | Phase D (not yet) |
 | Postgres persistence / SMTP / Gmail API | After demo (Phase E) |
 
 Ship plan: [`PLAN.md`](./PLAN.md).
@@ -100,14 +98,6 @@ npm run dev
 
 App: `http://localhost:3000`
 
-### Frontend e2e tests
-
-```bash
-cd frontend
-npx playwright install
-npm run test:e2e
-```
-
 ### Env reference
 
 - Backend: `backend/env.mvp.example`  
@@ -175,11 +165,9 @@ Reviewer pack: **[`EVIDENCE.md`](./EVIDENCE.md)** (URLs, testnet tx hashes, reco
 
 | Item | Status |
 |------|--------|
-| Public frontend URL | https://quittance-eosin.vercel.app (see `EVIDENCE.md`) |
-| Public API health | See `EVIDENCE.md` (Cloudflare tunnel → VPS MVP) |
-| Testnet tx hashes | Fill in after real Freighter pays (D5; target 10+) |
+| Public demo URL | Fill in `EVIDENCE.md` after deploy (D4) |
+| Testnet tx hashes | Fill in after a real Freighter pay (D5) |
 | Screen recording | Fill in after demo recording (D5) |
-| Feedback / analytics | `/feedback` + Vercel Analytics |
 
 Until then, run locally: `backend` → `npm run dev:mvp`, `frontend` → `npm run dev`.
 
@@ -192,8 +180,6 @@ backend/     Express API — use server-mvp.ts for demo
 frontend/    Next.js app
 deploy/      Vercel handoff + VPS systemd/nginx + CORS checklist
 db/          Postgres schema (post-demo)
-contracts/   Soroban helper crates
-docs/        Product and operator docs
 PLAN.md      Product & delivery plan
 ROADMAP.md   Short commit checklist
 EVIDENCE.md  Public demo URL + testnet evidence (reviewer one-pager)
